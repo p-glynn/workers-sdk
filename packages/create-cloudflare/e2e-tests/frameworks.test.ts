@@ -1,3 +1,4 @@
+import assert from "assert";
 import { existsSync } from "fs";
 import { cp } from "fs/promises";
 import { join } from "path";
@@ -635,12 +636,13 @@ describe.concurrent(
 			recreateLogFolder({ experimental }, ctx);
 		});
 
-		Object.keys(frameworkTests).forEach((frameworkId) => {
-			const frameworkConfig = frameworkMap[frameworkId];
-			const testConfig = frameworkTests[frameworkId];
+		Object.entries(frameworkTests).forEach(([frameworkKey, testConfig]) => {
+			const frameworkConfig = getFrameworkConfig(frameworkKey);
 
-			test({ experimental }).runIf(shouldRunTest(frameworkId, testConfig))(
-				frameworkId,
+			test({ experimental }).runIf(
+				shouldRunTest(frameworkConfig.id, testConfig),
+			)(
+				`${frameworkConfig.id} (${frameworkConfig.platform ?? "pages"})`,
 				async ({ logStream, project }) => {
 					if (!testConfig.verifyDeploy) {
 						expect(
@@ -652,11 +654,12 @@ describe.concurrent(
 
 					try {
 						const deploymentUrl = await runCli(
-							frameworkId,
+							frameworkConfig.id,
 							project.path,
 							logStream,
 							{
 								argv: [
+									...(testConfig.argv ?? []),
 									...(experimental ? ["--experimental"] : []),
 									...(testConfig.flags ? ["--", ...testConfig.flags] : []),
 								],
@@ -678,19 +681,37 @@ describe.concurrent(
 						// Make a request to the deployed project and verify it was successful
 						await verifyDeployment(
 							testConfig,
-							frameworkId,
+							frameworkConfig.id,
 							project.name,
 							`${deploymentUrl}${testConfig.verifyDeploy.route}`,
 							testConfig.verifyDeploy.expectedText,
 						);
 
-						// Copy over any test fixture files
-						const fixturePath = join(__dirname, "fixtures", frameworkId);
-						if (existsSync(fixturePath)) {
-							await cp(fixturePath, project.path, {
+						// Copy over any platform specific test fixture files
+						const platformFixturePath = join(
+							__dirname,
+							"fixtures",
+							frameworkConfig.id,
+							frameworkConfig.platform,
+						);
+						if (existsSync(platformFixturePath)) {
+							await cp(platformFixturePath, project.path, {
 								recursive: true,
 								force: true,
 							});
+						} else {
+							// Copy over any platform agnostic test fixture files
+							const fixturePath = join(
+								__dirname,
+								"fixtures",
+								frameworkConfig.id,
+							);
+							if (existsSync(fixturePath)) {
+								await cp(fixturePath, project.path, {
+									recursive: true,
+									force: true,
+								});
+							}
 						}
 
 						await verifyPreviewScript(
@@ -984,4 +1005,32 @@ function shouldRunTest(frameworkId: string, testConfig: FrameworkTestConfig) {
 	shouldRun &&= !testConfig.unsupportedOSs?.includes(process.platform);
 
 	return shouldRun;
+}
+
+/**
+ * Get the framework config and test info given a `frameworkKey`.
+ *
+ * Some frameworks support both Pages and Workers platform variants.
+ * If so, then the test must specify the variant in its key, of the form
+ * `<frameworkId>:<"pages"|"workers">`.
+ */
+function getFrameworkConfig(frameworkKey: string) {
+	const [frameworkId, platformVariant] = frameworkKey.split(":");
+	if ("platformVariants" in frameworkMap[frameworkId]) {
+		assert(
+			platformVariant === "pages" || platformVariant === "workers",
+			`Missing or invalid platformVariant in "${frameworkKey}" test.\nPlease update the test maps to contain both "${frameworkId}:pages" and "${frameworkId}:workers" properties.`,
+		);
+		assert(
+			"platformVariants" in frameworkMap[frameworkId],
+			`Expected platformVariants for "${frameworkId}" framework config.`,
+		);
+		return frameworkMap[frameworkId].platformVariants[platformVariant];
+	} else {
+		assert(
+			platformVariant === undefined,
+			`Unexpected platform variant in test for ${frameworkId}`,
+		);
+		return frameworkMap[frameworkId];
+	}
 }
