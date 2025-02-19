@@ -1,5 +1,131 @@
 # wrangler
 
+## 3.109.2
+
+### Patch Changes
+
+- [#7687](https://github.com/cloudflare/workers-sdk/pull/7687) [`cc853cf`](https://github.com/cloudflare/workers-sdk/commit/cc853cf0dcefc35c9d9022b9a1641d2d77c19da8) Thanks [@emily-shen](https://github.com/emily-shen)! - fix: bug where Pages deployments that create new projects were failing with a new repo
+
+- [#8131](https://github.com/cloudflare/workers-sdk/pull/8131) [`efd7f97`](https://github.com/cloudflare/workers-sdk/commit/efd7f9764199ef67dff14155bd3dd249c4dff5c7) Thanks [@lambrospetrou](https://github.com/lambrospetrou)! - D1 export will now show an error when the presigned URL is invalid
+
+- Updated dependencies [[`5e06177`](https://github.com/cloudflare/workers-sdk/commit/5e06177861b29aa9b114f9ecb50093190af94f4b)]:
+  - miniflare@3.20250214.0
+
+## 3.109.1
+
+### Patch Changes
+
+- [#8021](https://github.com/cloudflare/workers-sdk/pull/8021) [`28b1dc7`](https://github.com/cloudflare/workers-sdk/commit/28b1dc7c6f213de336d58ce93308575de8f42f06) Thanks [@0xD34DC0DE](https://github.com/0xD34DC0DE)! - fix: prevent \_\_cf_cjs name collision in the hybrid Nodejs compat plugin
+
+## 3.109.0
+
+### Minor Changes
+
+- [#8120](https://github.com/cloudflare/workers-sdk/pull/8120) [`3fb801f`](https://github.com/cloudflare/workers-sdk/commit/3fb801f734632c165685799cb1b752c4dad0445a) Thanks [@sdnts](https://github.com/sdnts)! - Add a new `update` subcommand for Queues to allow updating Queue settings
+
+- [#8120](https://github.com/cloudflare/workers-sdk/pull/8120) [`3fb801f`](https://github.com/cloudflare/workers-sdk/commit/3fb801f734632c165685799cb1b752c4dad0445a) Thanks [@sdnts](https://github.com/sdnts)! - Allow overriding message retention duration when creating Queues
+
+- [#8026](https://github.com/cloudflare/workers-sdk/pull/8026) [`542c6ea`](https://github.com/cloudflare/workers-sdk/commit/542c6ead5d7c7e64a103abd5572ec7b8aea96c90) Thanks [@penalosa](https://github.com/penalosa)! - Add `--outfile` to `wrangler deploy` for generating a worker bundle.
+
+  This is an advanced feature that most users won't need to use. When set, Wrangler will output your built Worker bundle in a Cloudflare specific format that captures all information needed to deploy a Worker using the [Worker Upload API](https://developers.cloudflare.com/api/resources/workers/subresources/scripts/methods/update/)
+
+- [#8026](https://github.com/cloudflare/workers-sdk/pull/8026) [`542c6ea`](https://github.com/cloudflare/workers-sdk/commit/542c6ead5d7c7e64a103abd5572ec7b8aea96c90) Thanks [@penalosa](https://github.com/penalosa)! - Add a `wrangler check startup` command to generate a CPU profile of your Worker's startup phase.
+
+  This can be imported into Chrome DevTools or opened directly in VSCode to view a flamegraph of your Worker's startup phase. Additionally, when a Worker deployment fails with a startup time error Wrangler will automatically generate a CPU profile for easy investigation.
+
+  Advanced usage:
+
+  - `--args`: to customise the way `wrangler check startup` builds your Worker for analysis, provide the exact arguments you use when deploying your Worker with `wrangler deploy`. For instance, if you deploy your Worker with `wrangler deploy --no-bundle`, you should use `wrangler check startup --args="--no-bundle"` to profile the startup phase.
+  - `--worker-bundle`: if you don't use Wrangler to deploy your Worker, you can use this argument to provide a Worker bundle to analyse. This should be a file path to a serialised multipart upload, with the exact same format as the API expects: https://developers.cloudflare.com/api/resources/workers/subresources/scripts/methods/update/
+
+### Patch Changes
+
+- [#8112](https://github.com/cloudflare/workers-sdk/pull/8112) [`fff677e`](https://github.com/cloudflare/workers-sdk/commit/fff677e35f67c28275262c1d19f7eb4d6c6ab071) Thanks [@penalosa](https://github.com/penalosa)! - When reporting errors to Sentry, Wrangler will now include the console output as additional metadata
+
+- [#8120](https://github.com/cloudflare/workers-sdk/pull/8120) [`3fb801f`](https://github.com/cloudflare/workers-sdk/commit/3fb801f734632c165685799cb1b752c4dad0445a) Thanks [@sdnts](https://github.com/sdnts)! - Check bounds when overriding delivery delay when creating Queues
+
+- [#7950](https://github.com/cloudflare/workers-sdk/pull/7950) [`4db1fb5`](https://github.com/cloudflare/workers-sdk/commit/4db1fb5696412c6666589a778184e10386294d71) Thanks [@cmackenzie1](https://github.com/cmackenzie1)! - Add local binding support for Worker Pipelines
+
+- [#8119](https://github.com/cloudflare/workers-sdk/pull/8119) [`1bc60d7`](https://github.com/cloudflare/workers-sdk/commit/1bc60d761ebf67a64ac248e3e2c826407bc26252) Thanks [@penalosa](https://github.com/penalosa)! - Output correct config format from `wrangler d1 create`. Previously, this command would always output TOML, regardless of the config file format
+
+- [#8130](https://github.com/cloudflare/workers-sdk/pull/8130) [`1aa2a91`](https://github.com/cloudflare/workers-sdk/commit/1aa2a9198578f8eb106f19c8475a63ff4eef26aa) Thanks [@emily-shen](https://github.com/emily-shen)! - Include default values for wrangler types --path and --x-include-runtime in telemetry
+
+  User provided strings are still left redacted as always.
+
+- [#8061](https://github.com/cloudflare/workers-sdk/pull/8061) [`35710e5`](https://github.com/cloudflare/workers-sdk/commit/35710e590f20e5c83fb25138ba4ae7890b780a08) Thanks [@emily-shen](https://github.com/emily-shen)! - fix: respect `WRANGLER_LOG` in `wrangler dev`
+
+  Previously, `--log-level=debug` was the only way to see debug logs in `wrangler dev`, which was unlike all other commands.
+
+- Updated dependencies [[`4db1fb5`](https://github.com/cloudflare/workers-sdk/commit/4db1fb5696412c6666589a778184e10386294d71)]:
+  - miniflare@3.20250204.1
+
+## 3.108.1
+
+### Patch Changes
+
+- [#8103](https://github.com/cloudflare/workers-sdk/pull/8103) [`a025ad2`](https://github.com/cloudflare/workers-sdk/commit/a025ad2ecb086cb4bcee6b9dfd8cf06eb2102ade) Thanks [@emily-shen](https://github.com/emily-shen)! - fix: fix bug where `wrangler secret list --format=json` was printing the wrangler banner.
+
+- Updated dependencies []:
+  - miniflare@3.20250204.0
+
+## 3.108.0
+
+### Minor Changes
+
+- [#7990](https://github.com/cloudflare/workers-sdk/pull/7990) [`b1966df`](https://github.com/cloudflare/workers-sdk/commit/b1966dfe57713f3ddcaa781d0551a1088a22424e) Thanks [@cmsparks](https://github.com/cmsparks)! - Add WRANGLER_CI_OVERRIDE_NAME for Workers CI
+
+- [#8028](https://github.com/cloudflare/workers-sdk/pull/8028) [`b2dca9a`](https://github.com/cloudflare/workers-sdk/commit/b2dca9a2fb885cb4da87a959fefa035c0974d15c) Thanks [@emily-shen](https://github.com/emily-shen)! - feat: Also log when _no_ bindings are found.
+
+  We currently print a worker's bindings during dev, versions upload and deploy. This just also prints something when there's no bindings found, in case you _were_ expecting bindings.
+
+- [#8037](https://github.com/cloudflare/workers-sdk/pull/8037) [`71fd250`](https://github.com/cloudflare/workers-sdk/commit/71fd250f67a02feab7a2f66623ac8bd52b7f7f21) Thanks [@WillTaylorDev](https://github.com/WillTaylorDev)! - Provides unsafe.metadata configurations when using wrangler versions secret put.
+
+### Patch Changes
+
+- [#8058](https://github.com/cloudflare/workers-sdk/pull/8058) [`1f80d69`](https://github.com/cloudflare/workers-sdk/commit/1f80d69f566d240428ddec0c7b62a23c6f5af3c1) Thanks [@WillTaylorDev](https://github.com/WillTaylorDev)! - Bugfix: Modified versions secret put to inherit all known bindings, which circumvents a limitation in the API which does not return all fields for all bindings.
+
+- [#7986](https://github.com/cloudflare/workers-sdk/pull/7986) [`88514c8`](https://github.com/cloudflare/workers-sdk/commit/88514c82d447903e48d9f782446a6b502e553631) Thanks [@andyjessop](https://github.com/andyjessop)! - docs: clarifies that local resources are "simulated locally" or "connected to remote resource", and adds console messages to help explain local dev
+
+- [#8008](https://github.com/cloudflare/workers-sdk/pull/8008) [`9d08af8`](https://github.com/cloudflare/workers-sdk/commit/9d08af81893df499d914b890d784a9554ebf9507) Thanks [@ns476](https://github.com/ns476)! - Add support for Images bindings (in private beta for now), with optional local support for platforms where Sharp is available.
+
+- [#7769](https://github.com/cloudflare/workers-sdk/pull/7769) [`6abe69c`](https://github.com/cloudflare/workers-sdk/commit/6abe69c3fe1fb2e762153a3094119ed83038a50b) Thanks [@cmackenzie1](https://github.com/cmackenzie1)! - Adds the following new option for `wrangler pipelines create` and `wrangler pipelines update` commands:
+
+  ```
+  --cors-origins           CORS origin allowlist for HTTP endpoint (use * for any origin)  [array]
+  ```
+
+- [#7290](https://github.com/cloudflare/workers-sdk/pull/7290) [`0c0374c`](https://github.com/cloudflare/workers-sdk/commit/0c0374cce3908a47f7459ba4810855c1ce124349) Thanks [@emily-shen](https://github.com/emily-shen)! - fix: add support for workers with assets when running multiple workers in one `wrangler dev` instance
+
+  https://github.com/cloudflare/workers-sdk/pull/7251 added support for running multiple Workers in one `wrangler dev`/miniflare session. e.g. `wrangler dev -c wrangler.toml -c ../worker2/wrangler.toml`, which among other things, allowed cross-service RPC to Durable Objects.
+
+  However this did not work in the same way as production when there was a Worker with assets - this PR should fix that.
+
+- [#7769](https://github.com/cloudflare/workers-sdk/pull/7769) [`6abe69c`](https://github.com/cloudflare/workers-sdk/commit/6abe69c3fe1fb2e762153a3094119ed83038a50b) Thanks [@cmackenzie1](https://github.com/cmackenzie1)! - Rename wrangler pipelines <create|update> flags
+
+  The following parameters have been renamed:
+
+  | Previous Name     | New Name              |
+  | ----------------- | --------------------- |
+  | access-key-id     | r2-access-key-id      |
+  | secret-access-key | r2-secret-access-key  |
+  | transform         | transform-worker      |
+  | r2                | r2-bucket             |
+  | prefix            | r2-prefix             |
+  | binding           | enable-worker-binding |
+  | http              | enable-http           |
+  | authentication    | require-http-auth     |
+  | filename          | file-template         |
+  | filepath          | partition-template    |
+
+- [#8012](https://github.com/cloudflare/workers-sdk/pull/8012) [`c412a31`](https://github.com/cloudflare/workers-sdk/commit/c412a31985f3c622e5e3cf366699f9e6977184a2) Thanks [@mtlemilio](https://github.com/mtlemilio)! - Use fetchPagedListResult when listing Hyperdrive configs from the API
+
+  This fixes an issue where only 20 configs were being listed.
+
+- [#8077](https://github.com/cloudflare/workers-sdk/pull/8077) [`60310cd`](https://github.com/cloudflare/workers-sdk/commit/60310cd796468e96571a4d0520f92af54da62630) Thanks [@emily-shen](https://github.com/emily-shen)! - feat: add telemetry to experimental auto-provisioning
+
+- Updated dependencies [[`c80dbd8`](https://github.com/cloudflare/workers-sdk/commit/c80dbd8d5e53a081cf600e250f1ddda860be1a12), [`0c0374c`](https://github.com/cloudflare/workers-sdk/commit/0c0374cce3908a47f7459ba4810855c1ce124349)]:
+  - miniflare@3.20250204.0
+
 ## 3.107.3
 
 ### Patch Changes
@@ -141,14 +267,14 @@
   ```json
   // wrangler.json
   {
-    "name": "my-worker",
-    "assets": {
-      "directory": "./public/",
-      "binding": "ASSETS"
-    },
-    "vars": {
-      "MY_VAR": "my-var"
-    }
+  	"name": "my-worker",
+  	"assets": {
+  		"directory": "./public/",
+  		"binding": "ASSETS"
+  	},
+  	"vars": {
+  		"MY_VAR": "my-var"
+  	}
   }
   ```
 
@@ -158,10 +284,10 @@
   const { env, dispose } = await getPlatformProxy();
 
   if (env.ASSETS) {
-    const text = await (
-      await env.ASSETS.fetch("http://0.0.0.0/file.txt")
-    ).text();
-    console.log(text); // logs the content of file.txt
+  	const text = await (
+  		await env.ASSETS.fetch("http://0.0.0.0/file.txt")
+  	).text();
+  	console.log(text); // logs the content of file.txt
   }
 
   await dispose();
@@ -279,7 +405,7 @@
 
   ```ts
   interface Env {
-    MY_VAR: "dev value";
+  	MY_VAR: "dev value";
   }
   ```
 
@@ -289,7 +415,7 @@
 
   ```ts
   interface Env {
-    MY_VAR: "dev value" | "prod value";
+  	MY_VAR: "dev value" | "prod value";
   }
   ```
 
@@ -402,11 +528,11 @@
 
     ```json
     {
-      "name": "my-worker",
-      "main": "./index.js",
-      "kv_namespaces": [
-        { "binding": "<BINDING_NAME1>", "id": "<NAMESPACE_ID1>" }
-      ]
+    	"name": "my-worker",
+    	"main": "./index.js",
+    	"kv_namespaces": [
+    		{ "binding": "<BINDING_NAME1>", "id": "<NAMESPACE_ID1>" }
+    	]
     }
     ```
 
@@ -414,7 +540,7 @@
 
     ```json
     {
-      "configPath": "../../dist/wrangler.json"
+    	"configPath": "../../dist/wrangler.json"
     }
     ```
 
@@ -712,9 +838,9 @@
 
   ```json
   {
-    "name": "worker-ts",
-    "main": "src/index.ts",
-    "compatibility_date": "2023-05-04"
+  	"name": "worker-ts",
+  	"main": "src/index.ts",
+  	"compatibility_date": "2023-05-04"
   }
   ```
 
@@ -1432,15 +1558,15 @@
   const { env, dispose } = await getPlatformProxy();
 
   try {
-    const sql = postgres(
-      // Note: connectionString points to `postgres://user:pass@127.0.0.1:1234/db` not to the actual hyperdrive
-      //       connection string, for more details see the explanation below
-      env.MY_HYPERDRIVE.connectionString,
-    );
-    const results = await sql`SELECT * FROM pg_tables`;
-    await sql.end();
+  	const sql = postgres(
+  		// Note: connectionString points to `postgres://user:pass@127.0.0.1:1234/db` not to the actual hyperdrive
+  		//       connection string, for more details see the explanation below
+  		env.MY_HYPERDRIVE.connectionString
+  	);
+  	const results = await sql`SELECT * FROM pg_tables`;
+  	await sql.end();
   } catch (e) {
-    console.error(e);
+  	console.error(e);
   }
 
   await dispose();
@@ -1776,7 +1902,7 @@
 
   ```ts
   interface Env {
-    OBJECT: DurableObjectNamespace<import("./src/index").MyDurableObject>;
+  	OBJECT: DurableObjectNamespace<import("./src/index").MyDurableObject>;
   }
   ```
 
@@ -1831,10 +1957,10 @@
 
   ```js
   export default {
-    async fetch(_request, _env, { waitUntil }) {
-      waitUntil(() => {}); // <-- throws an illegal invocation error
-      return new Response("Hello World!");
-    },
+  	async fetch(_request, _env, { waitUntil }) {
+  		waitUntil(() => {}); // <-- throws an illegal invocation error
+  		return new Response("Hello World!");
+  	},
   };
   ```
 
@@ -2328,7 +2454,7 @@
 
   ```typescript
   interface Env {
-    "some-var": "foobar";
+  	"some-var": "foobar";
   }
   ```
 
@@ -2350,7 +2476,7 @@
 
   ```js
   const { env } = await getPlatformProxy({
-    environment: "production",
+  	environment: "production",
   });
   ```
 
@@ -2527,21 +2653,21 @@
   import { WorkerEntrypoint } from "cloudflare:workers";
 
   export class EntrypointA extends WorkerEntrypoint {
-    fetch(request) {
-      return new Response("Hello from entrypoint A!");
-    }
+  	fetch(request) {
+  		return new Response("Hello from entrypoint A!");
+  	}
   }
 
   export const entrypointB: ExportedHandler = {
-    fetch(request, env, ctx) {
-      return new Response("Hello from entrypoint B!");
-    },
+  	fetch(request, env, ctx) {
+  		return new Response("Hello from entrypoint B!");
+  	},
   };
 
   export default <ExportedHandler>{
-    fetch(request, env, ctx) {
-      return new Response("Hello from the default entrypoint!");
-    },
+  	fetch(request, env, ctx) {
+  		return new Response("Hello from the default entrypoint!");
+  	},
   };
   ```
 
@@ -2901,12 +3027,12 @@
 
   ```ts
   interface Env {
-    SEND_EMAIL: SendEmail;
-    VECTORIZE: VectorizeIndex;
-    HYPERDRIVE: Hyperdrive;
-    MTLS: Fetcher;
-    BROWSER: Fetcher;
-    AI: Fetcher;
+  	SEND_EMAIL: SendEmail;
+  	VECTORIZE: VectorizeIndex;
+  	HYPERDRIVE: Hyperdrive;
+  	MTLS: Fetcher;
+  	BROWSER: Fetcher;
+  	AI: Fetcher;
   }
   ```
 
@@ -2929,7 +3055,7 @@
 
   ```js
   const worker = await unstable_dev("path/to/script.js", {
-    logLevel: "none",
+  	logLevel: "none",
   });
   ```
 
@@ -3164,11 +3290,11 @@
 
   ```ts
   export function randomBytes(length: number) {
-    if (navigator.userAgent !== "Cloudflare-Workers") {
-      return new Uint8Array(require("node:crypto").randomBytes(length));
-    } else {
-      return crypto.getRandomValues(new Uint8Array(length));
-    }
+  	if (navigator.userAgent !== "Cloudflare-Workers") {
+  		return new Uint8Array(require("node:crypto").randomBytes(length));
+  	} else {
+  		return crypto.getRandomValues(new Uint8Array(length));
+  	}
   }
   ```
 
@@ -3293,17 +3419,17 @@
 
   ```json
   {
-    "error": {
-      "text": "A request to the Cloudflare API (/accounts/xxxx/d1/database/xxxxxxx/query) failed.",
-      "notes": [
-        {
-          "text": "no such column: asdf at offset 7 [code: 7500]"
-        }
-      ],
-      "kind": "error",
-      "name": "APIError",
-      "code": 7500
-    }
+  	"error": {
+  		"text": "A request to the Cloudflare API (/accounts/xxxx/d1/database/xxxxxxx/query) failed.",
+  		"notes": [
+  			{
+  				"text": "no such column: asdf at offset 7 [code: 7500]"
+  			}
+  		],
+  		"kind": "error",
+  		"name": "APIError",
+  		"code": 7500
+  	}
   }
   ```
 
@@ -3467,12 +3593,12 @@
   const { bindings, dispose } = await getBindingsProxy();
 
   try {
-    const myKv = bindings.MY_KV;
-    const kvValue = await myKv.get("my-kv-key");
+  	const myKv = bindings.MY_KV;
+  	const kvValue = await myKv.get("my-kv-key");
 
-    console.log(`KV Value = ${kvValue}`);
+  	console.log(`KV Value = ${kvValue}`);
   } finally {
-    await dispose();
+  	await dispose();
   }
   ```
 
@@ -3863,17 +3989,17 @@
 
   ```jsonc
   {
-    "configurations": [
-      {
-        "name": "Wrangler",
-        "type": "node",
-        "request": "attach",
-        "port": 9229,
-        // These can be omitted, but doing so causes silent errors in the runtime
-        "attachExistingChildren": false,
-        "autoAttachChildProcesses": false,
-      },
-    ],
+  	"configurations": [
+  		{
+  			"name": "Wrangler",
+  			"type": "node",
+  			"request": "attach",
+  			"port": 9229,
+  			// These can be omitted, but doing so causes silent errors in the runtime
+  			"attachExistingChildren": false,
+  			"autoAttachChildProcesses": false,
+  		},
+  	],
   }
   ```
 
@@ -4131,18 +4257,18 @@
 
   ```json
   {
-    "configurations": [
-      {
-        "name": "Wrangler",
-        "type": "node",
-        "request": "attach",
-        "port": 9229,
-        "cwd": "/",
-        "resolveSourceMapLocations": null,
-        "attachExistingChildren": false,
-        "autoAttachChildProcesses": false
-      }
-    ]
+  	"configurations": [
+  		{
+  			"name": "Wrangler",
+  			"type": "node",
+  			"request": "attach",
+  			"port": 9229,
+  			"cwd": "/",
+  			"resolveSourceMapLocations": null,
+  			"attachExistingChildren": false,
+  			"autoAttachChildProcesses": false
+  		}
+  	]
   }
   ```
 
@@ -4744,11 +4870,11 @@
 
   ```js
   export default {
-    fetch(req) {
-      const url = new URL(req.url);
-      const name = url.searchParams.get("name");
-      return new Response("Hello, " + name);
-    },
+  	fetch(req) {
+  		const url = new URL(req.url);
+  		const name = url.searchParams.get("name");
+  		return new Response("Hello, " + name);
+  	},
   };
   ```
 
@@ -5415,9 +5541,9 @@ rozenmd@cflaptop test1 % npx wrangler d1 execute test --command="select * from c
 
   ```js
   worker = await unstable_dev(
-    "src/index.js",
-    {},
-    { disableExperimentalWarning: true },
+  	"src/index.js",
+  	{},
+  	{ disableExperimentalWarning: true }
   );
   ```
 
@@ -5425,7 +5551,7 @@ rozenmd@cflaptop test1 % npx wrangler d1 execute test --command="select * from c
 
   ```js
   worker = await unstable_dev("src/index.js", {
-    experimental: { disableExperimentalWarning: true },
+  	experimental: { disableExperimentalWarning: true },
   });
   ```
 
@@ -5698,9 +5824,9 @@ rozenmd@cflaptop test1 % npx wrangler d1 execute test --command="select * from c
 
   ```ts
   export const onRequest = ({ passThroughOnException }) => {
-    passThroughOnException();
+  	passThroughOnException();
 
-    x; // Would ordinarily throw an error, but instead, static assets are served.
+  	x; // Would ordinarily throw an error, but instead, static assets are served.
   };
   ```
 
@@ -5719,8 +5845,8 @@ rozenmd@cflaptop test1 % npx wrangler d1 execute test --command="select * from c
 
   ```ts
   declare module "**/*.wasm" {
-    const value: WebAssembly.Module;
-    export default value;
+  	const value: WebAssembly.Module;
+  	export default value;
   }
   ```
 
@@ -5728,8 +5854,8 @@ rozenmd@cflaptop test1 % npx wrangler d1 execute test --command="select * from c
 
   ```ts
   declare module "**/*.webp" {
-    const value: ArrayBuffer;
-    export default value;
+  	const value: ArrayBuffer;
+  	export default value;
   }
   ```
 
@@ -5737,8 +5863,8 @@ rozenmd@cflaptop test1 % npx wrangler d1 execute test --command="select * from c
 
   ```ts
   declare module "**/*.text" {
-    const value: string;
-    export default value;
+  	const value: string;
+  	export default value;
   }
   ```
 
@@ -5933,7 +6059,7 @@ rozenmd@cflaptop test1 % npx wrangler d1 execute test --command="select * from c
 
   ```js
   await unstable_dev("src/index.ts", {
-    local: false,
+  	local: false,
   });
   ```
 
@@ -6045,42 +6171,42 @@ rozenmd@cflaptop test1 % npx wrangler d1 execute test --command="select * from c
   import { unstable_dev } from "wrangler";
 
   describe("multi-worker testing", () => {
-    let childWorker;
-    let parentWorker;
+  	let childWorker;
+  	let parentWorker;
 
-    beforeAll(async () => {
-      childWorker = await unstable_dev(
-        "src/child-worker.js",
-        { config: "src/child-wrangler.toml" },
-        { disableExperimentalWarning: true },
-      );
-      parentWorker = await unstable_dev(
-        "src/parent-worker.js",
-        { config: "src/parent-wrangler.toml" },
-        { disableExperimentalWarning: true },
-      );
-    });
+  	beforeAll(async () => {
+  		childWorker = await unstable_dev(
+  			"src/child-worker.js",
+  			{ config: "src/child-wrangler.toml" },
+  			{ disableExperimentalWarning: true }
+  		);
+  		parentWorker = await unstable_dev(
+  			"src/parent-worker.js",
+  			{ config: "src/parent-wrangler.toml" },
+  			{ disableExperimentalWarning: true }
+  		);
+  	});
 
-    afterAll(async () => {
-      await childWorker.stop();
-      await parentWorker.stop();
-    });
+  	afterAll(async () => {
+  		await childWorker.stop();
+  		await parentWorker.stop();
+  	});
 
-    it("childWorker should return Hello World itself", async () => {
-      const resp = await childWorker.fetch();
-      if (resp) {
-        const text = await resp.text();
-        expect(text).toMatchInlineSnapshot(`"Hello World!"`);
-      }
-    });
+  	it("childWorker should return Hello World itself", async () => {
+  		const resp = await childWorker.fetch();
+  		if (resp) {
+  			const text = await resp.text();
+  			expect(text).toMatchInlineSnapshot(`"Hello World!"`);
+  		}
+  	});
 
-    it("parentWorker should return Hello World by invoking the child worker", async () => {
-      const resp = await parentWorker.fetch();
-      if (resp) {
-        const parsedResp = await resp.text();
-        expect(parsedResp).toEqual("Parent worker sees: Hello World!");
-      }
-    });
+  	it("parentWorker should return Hello World by invoking the child worker", async () => {
+  		const resp = await parentWorker.fetch();
+  		if (resp) {
+  			const parsedResp = await resp.text();
+  			expect(parsedResp).toEqual("Parent worker sees: Hello World!");
+  		}
+  	});
   });
   ```
 
@@ -6569,9 +6695,9 @@ rozenmd@cflaptop test1 % npx wrangler d1 execute test --command="select * from c
 
   ```js
   export default {
-    fetch(req, env) {
-      return env.Bee.fetch(req);
-    },
+  	fetch(req, env) {
+  		return env.Bee.fetch(req);
+  	},
   };
   ```
 
@@ -6585,9 +6711,9 @@ rozenmd@cflaptop test1 % npx wrangler d1 execute test --command="select * from c
 
   ```js
   export default {
-    fetch(req, env) {
-      return new Response("Hello World");
-    },
+  	fetch(req, env) {
+  		return new Response("Hello World");
+  	},
   };
   ```
 
@@ -7566,9 +7692,9 @@ And in your worker, you can call it like so:
 
 ```js
 export default {
-  fetch(req, env, ctx) {
-    return env.MYWORKER.fetch(new Request("http://domain/some-path"));
-  },
+	fetch(req, env, ctx) {
+		return env.MYWORKER.fetch(new Request("http://domain/some-path"));
+	},
 };
 ```
 
