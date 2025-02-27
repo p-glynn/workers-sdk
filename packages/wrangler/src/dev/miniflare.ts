@@ -791,6 +791,8 @@ export function buildAssetOptions(config: Pick<ConfigBundle, "assets">) {
 				binding: config.assets.binding,
 				routingConfig: config.assets.routingConfig,
 				assetConfig: config.assets.assetConfig,
+				// temporary and to be removed once flag is removed
+				unsafeEnableAssetsRpc: getFlag("ASSETS_RPC"),
 			},
 		};
 	}
@@ -1027,8 +1029,6 @@ export async function buildMiniflareOptions(
 		liveReload: config.liveReload,
 		upstream,
 		unsafeProxySharedSecret: proxyToUserWorkerAuthenticationSecret,
-
-		unsafeEnableAssetsRpc: getFlag("ASSETS_RPC"),
 
 		log,
 		verbose: logger.loggerLevel === "debug",

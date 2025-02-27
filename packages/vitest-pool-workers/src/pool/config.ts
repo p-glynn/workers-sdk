@@ -222,6 +222,7 @@ async function parseCustomPoolOptions(
 		options.miniflare.assets.routingConfig.has_user_worker = Boolean(
 			options.main
 		);
+		options.miniflare.assets.unsafeEnableAssetsRpc ??= false;
 	}
 	return options;
 }
